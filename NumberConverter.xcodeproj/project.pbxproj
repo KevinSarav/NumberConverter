@@ -60,6 +60,7 @@
 		804BA86D24AE87DF004A425F /* NumberConverter */ = {
 			isa = PBXGroup;
 			children = (
+				80BDC37C24AF7B8F00E7E9D2 /* Images */,
 				804BA86E24AE87E0004A425F /* AppDelegate.swift */,
 				804BA87024AE87E0004A425F /* SceneDelegate.swift */,
 				804BA87224AE87E0004A425F /* WelcomeViewController.swift */,
@@ -71,6 +72,13 @@
 				804BA88624AEAEB7004A425F /* Stepper.swift */,
 			);
 			path = NumberConverter;
+			sourceTree = "<group>";
+		};
+		80BDC37C24AF7B8F00E7E9D2 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

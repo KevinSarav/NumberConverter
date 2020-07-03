@@ -8,7 +8,9 @@
 
 import UIKit
 
-class ConverterViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ConverterViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+    
+    // This view is for performing number conversions.
     
     @IBOutlet weak var scType: UISegmentedControl!
     @IBOutlet weak var tfNumber: UITextField!
@@ -16,74 +18,80 @@ class ConverterViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     @IBOutlet weak var stNumber: UIStepper!
     @IBOutlet weak var pvConversion: UIPickerView!
     
-    var stepper: Stepper!
-    let conversions = ["Binary", "Decimal", "Hex", "Octal", "all four bases"]
+    var converter: Converter!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        converter = Converter()
         self.pvConversion.delegate = self
         self.pvConversion.dataSource = self
+        tfNumber.keyboardType = UIKeyboardType.decimalPad
+        self.tfNumber.delegate = self
+        tfNumber.becomeFirstResponder()
     }
     
-    @IBAction func emptyNumber(_ sender: Any) {
-        tfNumber.text = ""
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tfNumber.resignFirstResponder()
+        self.view.endEditing(true)
+    }
+    
+    @IBAction func changeType(_ sender: Any) {
+        // Change keyboard type based on chosen number type
+        switch scType.selectedSegmentIndex {
+        case 0:
+            tfNumber.keyboardType = UIKeyboardType.decimalPad
+        case 1, 2:
+            tfNumber.keyboardType = UIKeyboardType.numberPad
+        case 3:
+            tfNumber.keyboardType = UIKeyboardType.default
+        default: break
+        }
+        // Convert value in text field to appropriate type
+        let value = converter.getResult(scType.selectedSegmentIndex, stNumber.value)[0]
+        tfNumber.text = value
+        self.view.endEditing(true)
     }
     
     @IBAction func updateStepper(_ sender: Any) {
-        switch scType.selectedSegmentIndex {
-        case 0:
-            if let number = Double(tfNumber.text!) {
-                stNumber.value = number
-                lbResult.isHidden = true
-                lbResult.backgroundColor = UIColor.green
-            } else {
-                errorMessage("decimal")
-            }
-        case 1:
-            if let number = Int(tfNumber.text!, radix: 2) {
-                stNumber.value = Double(number)
-                lbResult.isHidden = true
-                lbResult.backgroundColor = UIColor.green
-            } else {
-                errorMessage("binary")
-            }
-        case 2:
-            if let number = Int(tfNumber.text!, radix: 0o10) {
-                stNumber.value = Double(number)
-                lbResult.isHidden = true
-                lbResult.backgroundColor = UIColor.green
-            } else {
-                errorMessage("octal")
-            }
-        case 3:
-            if let number = Int(tfNumber.text!, radix: 16) {
-                stNumber.value = Double(number)
-                lbResult.isHidden = true
-                lbResult.backgroundColor = UIColor.green
-            } else {
-                errorMessage("hex")
-            }
-        default: break
+        // Update stepper value with user's new input in text field
+        // If type can be casted to double based on chosen type:
+        if converter.toDouble(scType.selectedSegmentIndex, tfNumber.text!).check {
+            // Store casted double as the new stepper value and hide result label.
+            let value = converter.toDouble(scType.selectedSegmentIndex, tfNumber.text!).result
+            updateLimits(value)
+            stNumber.value = value
+            lbResult.isHidden = true
+            lbResult.backgroundColor = UIColor.green
+        } else {
+            // Display error message because user input cannot be casted to double
+            errorMessage("Must follow \(scType.titleForSegment(at: scType.selectedSegmentIndex)!) format.")
         }
     }
     
-    func errorMessage(_ type: String) {
+    func updateLimits(_ value: Double) {
+        // Update maximum and minimum value for stepper when going out-of-bounds.
+        // Range should always be 100
+        if value > stNumber.maximumValue || value < stNumber.minimumValue {
+            stNumber.maximumValue = value + 50
+            stNumber.minimumValue = value - 50
+        } else {
+            // No limits are updated
+        }
+    }
+    
+    func errorMessage(_ message: String) {
+        // Alter result label to display an error because of incorrect format
         lbResult.isHidden = false
         lbResult.backgroundColor = UIColor.red
-        lbResult.text = "Must follow \(type) format."
+        lbResult.text = message
     }
     
     @IBAction func updateNumber(_ sender: UIStepper) {
-        switch scType.selectedSegmentIndex {
-        case 0:
-            tfNumber.text = stNumber.value.description
-        case 1:
-            tfNumber.text = String(Int(stNumber.value), radix: 2)
-        case 2:
-            tfNumber.text = String(Int(stNumber.value), radix: 0o10)
-        case 3:
-            tfNumber.text = String(Int(stNumber.value), radix: 16)
-        default: break
+        // Increment / decrement text field number when using stepper
+        // If the text field number isn't formatted incorrectly:
+        if lbResult.backgroundColor != UIColor.red {
+            // Convert updated double value in stepper to String and store in text field
+            tfNumber.text = converter.toType(scType.selectedSegmentIndex, stNumber.value)
         }
     }
     
@@ -92,33 +100,21 @@ class ConverterViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return conversions.count
+        return converter.conversions.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return "Display in \(conversions[row])"
+        return "Display in \(converter.conversions[row])"
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // Convert number based on chosen picker type and display it if there is not already an error message
+        tfNumber.resignFirstResponder()
+        self.pvConversion.delegate = self
         if lbResult.backgroundColor != UIColor.red {
             lbResult.text = ""
             lbResult.backgroundColor = UIColor.green
-            switch row {
-            case 0:
-                lbResult.text! += "\(conversions[row]): \(String(Int(stNumber.value), radix: 2))\n"
-            case 1:
-                lbResult.text! += "\(conversions[row]): \(stNumber.value.description)\n"
-            case 2:
-                lbResult.text! += "\(conversions[row]): \(String(Int(stNumber.value), radix: 16))\n"
-            case 3:
-                lbResult.text! += "\(conversions[row]): \(String(Int(stNumber.value), radix: 0o10))\n"
-            case 4:
-                lbResult.text! += "Binary: \(String(Int(stNumber.value), radix: 2))\n"
-                lbResult.text! += "Decimal: \(stNumber.value.description)\n"
-                lbResult.text! += "Hex: \(String(Int(stNumber.value), radix: 16))\n"
-                lbResult.text! += "Octal: \(String(Int(stNumber.value), radix: 0o10))\n"
-            default: break
-            }
+            lbResult.text = converter.toResult(row, stNumber.value)
             lbResult.isHidden = false
         }
     }

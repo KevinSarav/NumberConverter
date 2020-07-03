@@ -10,11 +10,15 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
     
+    // This view is for the welcome screen.
+    // Welcome screen includes labels, an image and a button to segue into the Converter view.
+    
+    @IBOutlet weak var imgNumbers: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        imgNumbers.image = UIImage(named: "numbers.jpg")
     }
-
 
 }
 

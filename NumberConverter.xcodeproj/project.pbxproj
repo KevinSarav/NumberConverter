@@ -14,7 +14,11 @@
 		804BA87824AE87E1004A425F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 804BA87724AE87E1004A425F /* Assets.xcassets */; };
 		804BA87B24AE87E1004A425F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 804BA87924AE87E1004A425F /* LaunchScreen.storyboard */; };
 		804BA88524AE8B9D004A425F /* ConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804BA88424AE8B9D004A425F /* ConverterViewController.swift */; };
-		804BA88724AEAEB7004A425F /* Stepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804BA88624AEAEB7004A425F /* Stepper.swift */; };
+		804BA88724AEAEB7004A425F /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804BA88624AEAEB7004A425F /* Converter.swift */; };
+		80BDC38024AF975700E7E9D2 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BDC37F24AF975700E7E9D2 /* Decimal.swift */; };
+		80BDC38224AF978500E7E9D2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BDC38124AF978500E7E9D2 /* Binary.swift */; };
+		80BDC38424AF979900E7E9D2 /* Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BDC38324AF979900E7E9D2 /* Hex.swift */; };
+		80BDC38624AF97AE00E7E9D2 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BDC38524AF97AE00E7E9D2 /* Octal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +31,11 @@
 		804BA87A24AE87E1004A425F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		804BA87C24AE87E1004A425F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		804BA88424AE8B9D004A425F /* ConverterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterViewController.swift; sourceTree = "<group>"; };
-		804BA88624AEAEB7004A425F /* Stepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stepper.swift; sourceTree = "<group>"; };
+		804BA88624AEAEB7004A425F /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
+		80BDC37F24AF975700E7E9D2 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
+		80BDC38124AF978500E7E9D2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
+		80BDC38324AF979900E7E9D2 /* Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hex.swift; sourceTree = "<group>"; };
+		80BDC38524AF97AE00E7E9D2 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +68,7 @@
 		804BA86D24AE87DF004A425F /* NumberConverter */ = {
 			isa = PBXGroup;
 			children = (
-				80BDC37C24AF7B8F00E7E9D2 /* Images */,
+				80BDC37D24AF971B00E7E9D2 /* Converter */,
 				804BA86E24AE87E0004A425F /* AppDelegate.swift */,
 				804BA87024AE87E0004A425F /* SceneDelegate.swift */,
 				804BA87224AE87E0004A425F /* WelcomeViewController.swift */,
@@ -69,16 +77,28 @@
 				804BA87924AE87E1004A425F /* LaunchScreen.storyboard */,
 				804BA87C24AE87E1004A425F /* Info.plist */,
 				804BA88424AE8B9D004A425F /* ConverterViewController.swift */,
-				804BA88624AEAEB7004A425F /* Stepper.swift */,
 			);
 			path = NumberConverter;
 			sourceTree = "<group>";
 		};
-		80BDC37C24AF7B8F00E7E9D2 /* Images */ = {
+		80BDC37D24AF971B00E7E9D2 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
+				80BDC37E24AF973C00E7E9D2 /* Types */,
+				804BA88624AEAEB7004A425F /* Converter.swift */,
 			);
-			path = Images;
+			path = Converter;
+			sourceTree = "<group>";
+		};
+		80BDC37E24AF973C00E7E9D2 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				80BDC37F24AF975700E7E9D2 /* Decimal.swift */,
+				80BDC38124AF978500E7E9D2 /* Binary.swift */,
+				80BDC38324AF979900E7E9D2 /* Hex.swift */,
+				80BDC38524AF97AE00E7E9D2 /* Octal.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,9 +172,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80BDC38624AF97AE00E7E9D2 /* Octal.swift in Sources */,
 				804BA88524AE8B9D004A425F /* ConverterViewController.swift in Sources */,
+				80BDC38424AF979900E7E9D2 /* Hex.swift in Sources */,
+				80BDC38224AF978500E7E9D2 /* Binary.swift in Sources */,
 				804BA87324AE87E0004A425F /* WelcomeViewController.swift in Sources */,
-				804BA88724AEAEB7004A425F /* Stepper.swift in Sources */,
+				804BA88724AEAEB7004A425F /* Converter.swift in Sources */,
+				80BDC38024AF975700E7E9D2 /* Decimal.swift in Sources */,
 				804BA86F24AE87E0004A425F /* AppDelegate.swift in Sources */,
 				804BA87124AE87E0004A425F /* SceneDelegate.swift in Sources */,
 			);
